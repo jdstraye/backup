@@ -1,0 +1,14 @@
+C:\Apps
+C:\Dell
+C:\Drivers
+C:\Intel
+C:\PerfLogs
+C:\ProgramData
+C:\Program Files
+C:\Program Files (x86)
+C:\Windows
+C:\Windows10Upgrade
+C:\$Recycle.Bin\
+C:\Users\*\Microsoft\*
+C:\Users\*\AppData\*
+C:\Users\*\Battle.net\*

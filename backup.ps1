@@ -20,6 +20,7 @@ Backup destination path (default: D:\Backups).
 Requires 7-Zip and SevenZipSharp.dll.
 
 .EXAMPLE
+Edit the list of files to exclude in exclusions.txt
 .\backup.ps1
 #>
 
@@ -27,21 +28,26 @@ Requires 7-Zip and SevenZipSharp.dll.
 . ./backup_functions.ps1
 
 # Define which directories to skip archiving:
+$ExclusionList = Join-Path -Path $PSScriptRoot -ChildPath "exclusions.txt"
 $ExcludePaths = @(
-    "c:\Apps",
-    "c:\Dell",
-    "c:\Drivers",
-    "c:\Intel",
-    "c:\PerfLogs",
-    "c:\Program Files",
-    "c:\Program Files (x86)",
-    "c:\Windows",
-    "c:\Windows10Upgrade"
+    "C:\Apps",
+    "C:\Dell",
+    "C:\Drivers",
+    "C:\Intel",
+    "C:\PerfLogs",
+    "C:\ProgramData",
+    '"C:\Program Files"',
+    '"C:\Program Files (x86)"',
+    "C:\Windows",
+    "C:\Windows10Upgrade",
+    '"C:\$Recycle.Bin\"',
+    '"C:\Users\*\Microsoft\*"',
+    '"C:\Users\*\AppData\*"'
 )
 # Define backup settings
 $sourcePath = "C:"
 $backupPath = "D:\Backups"
-$logPath = Join-Path -Path $backupPath -ChildPath "BackupLog.txt"
+$logPath = Join-Path -Path $backupPath -ChildPath "Backup.log"
 $catalogPath = Join-Path -Path $backupPath -ChildPath "BackupCatalog.csv"
 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $backupFileName = "Backup-$timestamp.zip"
@@ -52,7 +58,8 @@ try {
     New-BackupDirectory -Path $backupPath
 
     # Compress backup
-    Compress-Backup -SourcePath $sourcePath -BackupFilePath $backupFilePath -ExcludePaths @ExcludePaths
+    Compress-Backup -SourcePath $sourcePath -BackupFilePath $backupFilePath -ExclusionList $ExclusionList
+    #debug#Compress-Backup -SourcePath $sourcePath -BackupFilePath $backupFilePath -ExcludePaths $ExcludePaths
 
     # Apply retention policies
     Set-RetentionPolicies -BackupPath $backupPath -LogPath $logPath -CatalogPath $catalogPath

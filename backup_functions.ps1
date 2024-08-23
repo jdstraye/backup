@@ -22,20 +22,35 @@ function Compress-Backup {
     param (
         [string]$SourcePath,
         [string]$BackupFilePath,
+        [string]$ExclusionList
         [string[]]$ExcludePaths
     )
-    Add-Type -Path "C:\Program Files\7-Zip\7z.dll"
-    Add-Type -Path "C:\Program Files\SevenZipSharp\lib\net45\SevenZipSharp.dll"
-    $archive = New-Object SevenZipSharp.SevenZipCompressor
-    $archive.ArchiveFormat = [SevenZipSharp.OutArchiveFormat]::Zip
-    $archive.CompressionLevel = [SevenZipSharp.CompressionLevel]::Ultra
-    $archive.FastCompression = $true
-    $archive.IncludeEmptyDirectories = $false
-    foreach ($excludePath in $ExcludePaths) {
-        $archive.ExcludeFiles.Add($excludePath + "\*")
+    $7zipPath = "C:\Program Files\7-Zip\7z.exe"
+    #20240822#$excludeArgs = @()
+    #20240822#foreach ($excludePath in $ExcludePaths) {
+    #20240822#    $excludeArgs += "-xr!$excludePath "
+    #20240822#}
+    if ($ExclusionList) {
+        $excludeArgs = "-xr@`"$ExclusionList`" "
+    } elseif ($ExcludePaths) {
+        $excludeArgs = @()
+        foreach excludePath in $ExcludePaths {
+            $excludeArgs += '-xr@"$excludePath" '
+        }
     }
-    $archive.CompressFiles($BackupFilePath, $SourcePath)
+    $args = @(
+        "a", 
+        "-y",
+        "-tzip", 
+        "-mx=9", 
+        $BackupFilePath, 
+        $SourcePath
+    ) + $excludeArgs
+    #debug#Write-Debug "7-Zip command: $7zipPath $args"
+    #debug#exit 1
+    & $7zipPath $args
 }
+
 function Write-Log {
     param (
         [string]$Path,
