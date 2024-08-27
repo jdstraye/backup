@@ -22,7 +22,7 @@ function Compress-Backup {
     param (
         [string]$SourcePath,
         [string]$BackupFilePath,
-        [string]$ExclusionList
+        [string]$ExclusionList,
         [string[]]$ExcludePaths
     )
     $7zipPath = "C:\Program Files\7-Zip\7z.exe"
@@ -30,25 +30,46 @@ function Compress-Backup {
     #20240822#foreach ($excludePath in $ExcludePaths) {
     #20240822#    $excludeArgs += "-xr!$excludePath "
     #20240822#}
+    $excludeArgs = @()
     if ($ExclusionList) {
-        $excludeArgs = "-xr@`"$ExclusionList`" "
-    } elseif ($ExcludePaths) {
-        $excludeArgs = @()
-        foreach excludePath in $ExcludePaths {
-            $excludeArgs += '-xr@"$excludePath" '
+        $excludeArgs += "-x@`"$ExclusionList`" " #+= is needed to append the string to the array
+    }
+    if ($ExcludePaths) {
+        foreach ($excludePath in $ExcludePaths) {
+            $excludeArgs += "-xr!`"$excludePath`" "
         }
     }
-    $args = @(
-        "a", 
+
+    # Check if the backup file already exists
+    #debug#Write-Host "HERE!"
+    Write-Output "Backing up to '$BackupFilePath'"
+    #20240823#    if (Test-Path $BackupFilePath) {
+    #20240823#        # If it exists, we will still use the 'a' command to add files
+    #20240823#        Write-Host "Archive exists. Adding files to existing archive, $BackupFilePath."
+    #20240823#        $sevenZipArgs += @( "a" )
+    #20240823#    }
+    #20240823#    else {
+    #20240823#        Write-Host "Archive does not exist. Creating new archive, $BackupFilePath."
+    #20240823#        $sevenZipArgs += @( )
+    #20240823#    }
+    $sevenZipArgs += @( 
+        "a",
         "-y",
         "-tzip", 
         "-mx=9", 
-        $BackupFilePath, 
-        $SourcePath
+        #20240824#"-bb1",
+        "-bb3",
+        "`"$BackupFilePath`"", 
+        "`"$SourcePath`""
     ) + $excludeArgs
-    #debug#Write-Debug "7-Zip command: $7zipPath $args"
+    Write-Debug "7-Zip command: $7zipPath $($sevenZipArgs -join ' ')"
     #debug#exit 1
-    & $7zipPath $args
+    #& $7zipPath $sevenZipArgs This failed to launch correctly because of the complex arguments.
+    # Execute the 7-Zip command using Start-Process to better handle the complex argument list
+    # Start-Process -FilePath $7zipPath -ArgumentList $sevenZipArgs -Wait -NoNewWindow This was'nt sending output to stdout like it should, probably because of the -NoNewWindow flag.
+    # Start-Process -FilePath $7zipPath -ArgumentList $sevenZipArgs -Wait -NoNewWindow -RedirectStandardOutput $null -RedirectStandardError $null The interpreter sometimes complains about RedirectStandardOutput being null
+    $process = Start-Process -FilePath $7zipPath -ArgumentList $sevenZipArgs -Wait -NoNewWindow -PassThru
+    $process | Tee-Object -FilePath $null
 }
 
 function Write-Log {
@@ -69,7 +90,17 @@ function Set-RetentionPolicies {
         # Daily retention (keep last 3 backups)
         $dailyBackups = Get-ChildItem -Path $BackupPath -Filter "Backup-*.zip" | Sort-Object LastWriteTime -Descending
         if ($dailyBackups.Count -gt 3) {
-            $dailyBackups[3..$dailyBackups.Count - 1] | Remove-Item -Force
+            #200240824#$dailyBackups[3..$dailyBackups.Count - 1] | Remove-Item -Force # PowerShell can't handle this level of abstraction (index slicing) when removing elements of an array.
+            $dailyBackupsToKeep = $dailyBackups | Where-Object { $_.Index -lt 3 }
+            $dailyBackupsToRemove = $dailyBackups | Where-Object { $_.Index -ge 3 }
+
+            $dailyBackupsToRemove | Remove-Item -Force
+            
+            # Output the names of the backups being retained/discarded
+            Write-Output "Retaining the following daily backups:"
+            $dailyBackupsToKeep | ForEach-Object { Write-Output $_.FullName }
+            Write-Output "Removed the following daily backups:"
+            $dailyBackupsToRemove | ForEach-Object { Write-Output $_.FullName }
             Write-Log -Path $LogPath -Message "Removed daily backups older than 3 days"
         }
 

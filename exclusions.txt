@@ -1,14 +1,65 @@
-C:\Apps
-C:\Dell
-C:\Drivers
-C:\Intel
-C:\PerfLogs
-C:\ProgramData
-C:\Program Files
-C:\Program Files (x86)
-C:\Windows
-C:\Windows10Upgrade
+C:\$GetCurrent\
 C:\$Recycle.Bin\
-C:\Users\*\Microsoft\*
-C:\Users\*\AppData\*
-C:\Users\*\Battle.net\*
+C:\$Recycle.Bin\*
+C:\$SysReset\
+C:\$WinREAgent\
+C:\Apps\
+C:\Config.Msi
+C:\Config.Msi\
+C:\Dell\
+C:\Documents and Settings\
+C:\Drivers\
+C:\Intel\
+C:\OneDriveTemp\
+C:\PerfLogs\
+C:\Program Files (x86)\
+C:\Program Files\
+C:\ProgramData\
+C:\Recovery\
+C:\System Volume Information\
+C:\Users\Administrator\
+C:\Users\Administrator\AppData\
+C:\Users\Administrator\Application Data\
+C:\Users\Administrator\Battle.net\
+C:\Users\Administrator\BlueStacks\
+C:\Users\Administrator\Microsoft\
+C:\Users\All Users
+C:\Users\All Users\
+C:\Users\All Users\*
+C:\Users\All Users\AppData\
+C:\Users\All Users\Application Data\
+C:\Users\All Users\Battle.net\
+C:\Users\All Users\BlueStacks\
+C:\Users\All Users\Microsoft\
+C:\Users\Default User\
+C:\Users\Default
+C:\Users\Default\AppData\
+C:\Users\Default\Application Data\
+C:\Users\Default\Battle.net\
+C:\Users\Default\BlueStacks\
+C:\Users\Default\Microsoft\
+C:\Users\jdstr\AppData\
+C:\Users\jdstr\Application Data\
+C:\Users\jdstr\Battle.net\
+C:\Users\jdstr\BlueStacks\
+C:\Users\jdstr\Microsoft\
+C:\Users\LocalService\
+C:\Users\LocalService\AppData\
+C:\Users\LocalService\Application Data\
+C:\Users\LocalService\Battle.net\
+C:\Users\LocalService\BlueStacks\
+C:\Users\LocalService\Microsoft\
+C:\Users\NetworkService\
+C:\Users\NetworkService\AppData\
+C:\Users\NetworkService\Application Data\
+C:\Users\NetworkService\Battle.net\
+C:\Users\NetworkService\BlueStacks\
+C:\Users\NetworkService\Microsoft\
+C:\Users\Public
+C:\Users\Public\AppData\
+C:\Users\Public\Application Data\
+C:\Users\Public\Battle.net\
+C:\Users\Public\BlueStacks\
+C:\Users\Public\Microsoft\
+C:\Windows\
+C:\Windows10Upgrade\
