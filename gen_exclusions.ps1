@@ -9,7 +9,7 @@ $exclusions = @(
     "C:\Program Files (x86)\",
     "C:\Windows\",
     "C:\Windows10Upgrade\",
-    "C:\`$Recycle.Bin\",
+    "C:\$Recycle.Bin\",
     "C:\Config.Msi\",
     "C:\OneDriveTemp\",
     "C:\Recovery\",

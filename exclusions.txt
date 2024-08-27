@@ -43,6 +43,7 @@ C:\Users\jdstr\Application Data\
 C:\Users\jdstr\Battle.net\
 C:\Users\jdstr\BlueStacks\
 C:\Users\jdstr\Microsoft\
+C:\Users\jdstr\OneDrive\Documents\PowerShellScript\backup.git\
 C:\Users\LocalService\
 C:\Users\LocalService\AppData\
 C:\Users\LocalService\Application Data\
