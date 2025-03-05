@@ -36,6 +36,9 @@ In PowerShell, there are six streams:
 -Debug is an argument that is supported by some commands starting in PowerShell 5.
 #>
 
+# Set the working directory to the script's location
+Set-Location -Path (Split-Path -Path $MyInvocation.MyCommand.Definition -Parent)
+
 # Import functions from backup_functions.ps1
 . ./backup_functions.ps1
 
